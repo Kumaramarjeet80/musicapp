@@ -7,6 +7,9 @@ on:
     branches: [ "**" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -48,9 +53,29 @@ jobs:
           path: build.log
           retention-days: 7
 
+      - name: Push Build Log to ci-log branch
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan ci-log || git checkout -B ci-log
+          git rm -rf . || true
+          if [ -f build.log ]; then
+            cp build.log current_build.log
+            git add current_build.log
+            git commit -m "ci: update build log [skip ci]" || true
+            git push -u origin ci-log --force || true
+          fi
+
       - name: Publish Build Summary / Logs
         if: always()
         run: |
+          echo "=== BUILD LOG HEAD ==="
+          head -n 50 build.log || true
+          echo "=== BUILD LOG ERRORS ==="
+          grep -E "e: |FAILURE:|Error:|FAILED" build.log || true
+          echo "=== BUILD LOG TAIL ==="
+          tail -n 150 build.log || true
           echo "### Gradle Build Log Summary" >> $GITHUB_STEP_SUMMARY
           if [ -f build.log ]; then
             echo "#### Error lines:" >> $GITHUB_STEP_SUMMARY
