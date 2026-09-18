@@ -57,13 +57,4 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlist_track_cross_ref WHERE playlistId = :playlistId ORDER BY sortOrder ASC")
     suspend fun getCrossRefsForPlaylist(playlistId: Long): List<PlaylistTrackCrossRef>
-
-    @Transaction
-    suspend fun reorderTracks(playlistId: Long, trackIdsInOrder: List<Long>) {
-        clearPlaylist(playlistId)
-        val refs = trackIdsInOrder.mapIndexed { index, trackId ->
-            PlaylistTrackCrossRef(playlistId = playlistId, trackId = trackId, sortOrder = index)
-        }
-        insertCrossRefs(refs)
-    }
 }
