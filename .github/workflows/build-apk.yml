@@ -53,6 +53,34 @@ jobs:
           path: build.log
           retention-days: 7
 
+      - name: Push APK to apk-release branch
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan apk-release || git checkout -B apk-release
+          git rm -rf . || true
+          APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -n "$APK_PATH" ] && [ -f "$APK_PATH" ]; then
+            cp "$APK_PATH" ammu-player-debug.apk
+            git add ammu-player-debug.apk
+            git commit -m "release: latest compiled apk [skip ci]" || true
+            git push -u origin apk-release --force || true
+          fi
+
+      - name: Publish GitHub Release
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -n "$APK_PATH" ] && [ -f "$APK_PATH" ]; then
+            gh release create v1.0.0 "$APK_PATH" \
+              --title "Ammu Audio Player v1.0.0" \
+              --notes "Production-ready, offline-first native Android audio player with AMOLED Black UI, Media3 ExoPlayer, Dual DSP Equalizer, and 4-Key Vault Security." \
+              --clobber || true
+          fi
+
       - name: Push Build Log to ci-log branch
         if: always()
         run: |
