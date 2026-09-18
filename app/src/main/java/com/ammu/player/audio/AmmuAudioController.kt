@@ -3,6 +3,7 @@ package com.ammu.player.audio
 import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
@@ -11,7 +12,6 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.ammu.player.data.model.TrackEntity
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -107,7 +107,7 @@ class AmmuAudioController(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }, MoreExecutors.directExecutor())
+        }, ContextCompat.getMainExecutor(context))
     }
 
     private fun startProgressTracking() {
