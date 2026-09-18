@@ -26,7 +26,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
+        shell: bash
         run: |
+          set -e -o pipefail
           ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
 
       - name: Upload Debug APK Artifact
@@ -34,7 +36,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ammu-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
           retention-days: 14
 
       - name: Publish Build Summary / Logs
@@ -43,7 +46,7 @@ jobs:
           echo "### Gradle Build Log Output" >> $GITHUB_STEP_SUMMARY
           echo '```text' >> $GITHUB_STEP_SUMMARY
           if [ -f build.log ]; then
-            tail -n 100 build.log >> $GITHUB_STEP_SUMMARY
+            tail -n 120 build.log >> $GITHUB_STEP_SUMMARY
           else
             echo "No build.log found" >> $GITHUB_STEP_SUMMARY
           fi

@@ -143,7 +143,7 @@ fun BackupExportImportDialog(
                     containerColor = PureBlack,
                     contentColor = AccentCyan,
                     indicator = { tabPositions ->
-                        TabRowDefaults.SecondaryIndicator(
+                        TabRowDefaults.Indicator(
                             Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
                             color = if (selectedTab == 0) AccentCyan else AccentPink
                         )
