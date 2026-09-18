@@ -1,0 +1,33 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Vinyl Outer Ring -->
+    <path
+        android:fillColor="#FF0D0D12"
+        android:pathData="M24,4C12.95,4 4,12.95 4,24s8.95,20 20,20 20,-8.95 20,-20S35.05,4 24,4z"/>
+    <!-- Concentric Grooves -->
+    <path
+        android:strokeColor="#FF242430"
+        android:strokeWidth="1.5"
+        android:pathData="M24,10C16.27,10 10,16.27 10,24s6.27,14 14,14 14,-6.27 14,-14S31.73,10 24,10z"/>
+    <path
+        android:strokeColor="#FF303040"
+        android:strokeWidth="1.5"
+        android:pathData="M24,15C19.03,15 15,19.03 15,24s4.03,9 9,9 9,-4.03 9,-9S28.97,15 24,15z"/>
+    <!-- Center Label Glow -->
+    <path
+        android:fillColor="#FF00E5FF"
+        android:pathData="M24,18C20.69,18 18,20.69 18,24s2.69,6 6,6 6,-2.69 6,-6S27.31,18 24,18z"/>
+    <!-- Center Spindle Hole -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M24,22C22.9,22 22,22.9 22,24s0.9,2 2,2 2,-0.9 2,-2S25.1,22 24,22z"/>
+    <!-- Neon Wave Accent -->
+    <path
+        android:strokeColor="#FFFF2A6D"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M16,36 C20,40 28,40 32,36"/>
+</vector>
